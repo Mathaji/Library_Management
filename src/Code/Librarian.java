@@ -1,7 +1,7 @@
 public class Librarian
 {
     private final String firstName;
-    private final String middleName;
+    private String       middleName;
     private final String lastName;
     private final String workEmail;
     private final String password;
@@ -17,6 +17,8 @@ public class Librarian
                      final int librarianAge,
                      final String phoneNumber)
     {
+        validateMiddleName(middleName);
+
         this.firstName    = firstName;
         this.middleName   = middleName;
         this.lastName     = lastName;
@@ -26,6 +28,17 @@ public class Librarian
         this.phoneNumber  = phoneNumber;
     }
 
+    final void validateMiddleName(final String middleName)
+    {
+        if((middleName == null) || (!middleName.isBlank()) || (middleName.isEmpty()))
+        {
+            this.middleName = null;
+        }
+        else
+        {
+            this.middleName = middleName;
+        }
+    }
     final String getFirstName()
     {
         return firstName;
@@ -63,6 +76,10 @@ public class Librarian
 
     final String getFullName()
     {
-        return getFirstName() + " " + getMiddleName() + " " + getLastName();
+        if(getMiddleName() != null)
+        {
+            return getFirstName() + " " + getMiddleName() + " " + getLastName();
+        }
+        return getFirstName() + " " + " " + getLastName();
     }
 }

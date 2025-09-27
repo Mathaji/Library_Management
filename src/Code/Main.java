@@ -27,7 +27,7 @@ public class Main
         {
             case ADMIN:
                 System.out.printf("%d. Librarian Registration\n%d. Librarian Sign-in\nOption: ",
-                        LIBRARIAN_REGISTRATION, LIBRARIAN_SIGN_IN);
+                                  LIBRARIAN_REGISTRATION, LIBRARIAN_SIGN_IN);
 
                 userOption = userInput.nextInt();
                 userInput.nextLine();
@@ -46,7 +46,7 @@ public class Main
 
             case STUDENT:
                 System.out.printf("%d. Student Registration\n%d. Student Sign-in\nOption: ",
-                        STUDENT_REGISTRATION, STUDENT_SIGN_IN);
+                                  STUDENT_REGISTRATION, STUDENT_SIGN_IN);
 
                 userOption = userInput.nextInt();
                 userInput.nextLine();
