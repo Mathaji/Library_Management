@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 public class MyFunctions
 {
+    private static final int MAX_STUDENT_FILE_PARTS = 4;
     // Student Navigating Options
     private static final int VIEW_STUDENT_DETAILS = 1;
     private static final int VIEW_BOOKS_READ      = 2;
@@ -24,15 +25,15 @@ public class MyFunctions
 // For Option 1: Librarian Sign in
     static void librarianRegistration()
     {
-        final String firstName;
-        final String middleName;
-        final String lastName;
-        final String workEmail;
-        final String password;
-        final int    librarianAge;
-        final String phoneNumber;
+        final String    firstName;
+        final String    middleName;
+        final String    lastName;
+        final String    workEmail;
+        final String    password;
+        final int       librarianAge;
+        final String    phoneNumber;
         final Librarian librarian;
-        final String filename;
+        final String    filename;
 
         System.out.print("Enter First Name: ");
         firstName = input.nextLine();
@@ -58,8 +59,8 @@ public class MyFunctions
         phoneNumber = input.nextLine();
 
         librarian = new Librarian(firstName, middleName, lastName, workEmail, password, librarianAge, phoneNumber);
-        filename = String.format(FILEPATH_LIBRARIAN + File.separator + "%s%s.txt",
-                librarian.getFirstName(), librarian.getPassword());
+        filename  = String.format(FILEPATH_LIBRARIAN + File.separator + "%s%s.txt",
+                    librarian.getFirstName(), librarian.getPassword());
 
         try(final BufferedWriter writer = new BufferedWriter(new FileWriter(filename)))
         {
@@ -75,7 +76,6 @@ public class MyFunctions
         {
             throw new RuntimeException(e);
         }
-
         input.close();
     }
 
@@ -168,7 +168,7 @@ public class MyFunctions
         }
     }
 
-    static void signInOptions(String studentNumber)
+    static void signInOptions(final String studentNumber)
     {
         final int    optionNumber;
         final String signInNumber;
@@ -212,22 +212,32 @@ public class MyFunctions
             {
                 String[] parts = line.split(REGEX_SECTION_SPLIT);
 
-                if(parts.length < 5)
+                if(parts.length >= MAX_STUDENT_FILE_PARTS)
                 {
-                    String oneLine = parts[0].trim();
-                    String secondLine = parts[1].trim();
-                    String thirdLine = parts[2].trim();
-                    String fourthLine = parts[3].trim();
+                    for(int i = 0; i < parts.length; i++)
+                    {
+                        parts[i] = parts[i].trim();
+                    }
 
-                    fileContents.add(oneLine);
-                    fileContents.add(secondLine);
-                    fileContents.add(thirdLine);
-                    fileContents.add(fourthLine);
+                    final String   studentDetailsHeading;
+                    final String   studentDetails;
+                    final String   bookHeading;
+                    final String   books;
+                    final String[] studentSection;
 
+                    studentDetailsHeading = parts[0];
+                    studentDetails        = parts[1];
+                    bookHeading           = parts[2];
+                    books                 = parts[3];
 
-                    String[] sectionsOfSecondLine = secondLine.split(REGEX_MID_SECTION_SPLIT);
+                    fileContents.add(studentDetailsHeading);
+                    fileContents.add(studentDetails);
+                    fileContents.add(bookHeading);
+                    fileContents.add(books);
 
-                    for(String studentDetail: sectionsOfSecondLine)
+                    studentSection = studentDetails.split(REGEX_MID_SECTION_SPLIT);
+
+                    for(final String studentDetail: studentSection)
                     {
                         System.out.println(studentDetail.trim());
                     }
@@ -238,7 +248,6 @@ public class MyFunctions
         {
             throw new RuntimeException(e);
         }
-
         signInOptions(studentNumber);
     }
 
@@ -262,27 +271,33 @@ public class MyFunctions
                 final String[] parts;
                 parts = line.split(REGEX_SECTION_SPLIT);
 
-                if(parts.length < 5)
+                if(parts.length >= MAX_STUDENT_FILE_PARTS)
                 {
-                    final String   oneLine;
-                    final String   secondLine;
-                    final String   thirdLine;
-                    final String   fourthLine;
-                    final String[] sectionsOfFourthLine;
+                    // Trim all parts at one go
+                    for(int i = 0; i < parts.length; i++)
+                    {
+                        parts[i] = parts[i].trim();
+                    }
 
-                    oneLine    = parts[0].trim();
-                    secondLine = parts[1].trim();
-                    thirdLine  = parts[2].trim();
-                    fourthLine = parts[3].trim();
+                    final String   studentDetailsHeading;
+                    final String   studentDetails;
+                    final String   bookHeading;
+                    final String   books;
+                    final String[] specificBook;
 
-                    fileContents.add(oneLine);
-                    fileContents.add(secondLine);
-                    fileContents.add(thirdLine);
-                    fileContents.add(fourthLine);
+                    studentDetailsHeading = parts[0];
+                    studentDetails        = parts[1];
+                    bookHeading           = parts[2];
+                    books                 = parts[3];
 
-                    sectionsOfFourthLine = fourthLine.split(REGEX_MID_SECTION_SPLIT);
+                    fileContents.add(studentDetailsHeading);
+                    fileContents.add(studentDetails);
+                    fileContents.add(bookHeading);
+                    fileContents.add(books);
 
-                    for(final String studentDetail: sectionsOfFourthLine)
+                    specificBook = books.split(REGEX_MID_SECTION_SPLIT);
+
+                    for(final String studentDetail: specificBook)
                     {
                         System.out.println(studentDetail.trim());
                     }
@@ -293,7 +308,6 @@ public class MyFunctions
         {
             throw new RuntimeException(e);
         }
-
         signInOptions(studentNumber);
     }
 
