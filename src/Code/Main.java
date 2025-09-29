@@ -11,6 +11,8 @@ public class Main
     private static final int STUDENT_REGISTRATION = 1;
     private static final int STUDENT_SIGN_IN      = 2;
 
+    private static final int BACK_TO_MAIN_PAGE      = 3;
+
     private static final Scanner userInput = new Scanner(System.in);
 
     public static void main(final String[] args)
@@ -26,8 +28,8 @@ public class Main
         switch(option)
         {
             case ADMIN:
-                System.out.printf("%d. Librarian Registration\n%d. Librarian Sign-in\nOption: ",
-                                  LIBRARIAN_REGISTRATION, LIBRARIAN_SIGN_IN);
+                System.out.printf("%d. Librarian Registration\n%d. Librarian Sign-in\n%d. Back to Main Page\nOption: ",
+                                  LIBRARIAN_REGISTRATION, LIBRARIAN_SIGN_IN, BACK_TO_MAIN_PAGE);
 
                 userOption = userInput.nextInt();
                 userInput.nextLine();
@@ -41,12 +43,16 @@ public class Main
                     case LIBRARIAN_SIGN_IN:
                         MyFunctions.librarianSignIn();
                         break;
+
+                    case BACK_TO_MAIN_PAGE:
+                        System.out.println("Returns back to main page...");
+                        break;
                 }
                 break;
 
             case STUDENT:
-                System.out.printf("%d. Student Registration\n%d. Student Sign-in\nOption: ",
-                                  STUDENT_REGISTRATION, STUDENT_SIGN_IN);
+                System.out.printf("%d. Student Registration\n%d. Student Sign-in\n%d. Back to Main Page\nOption: ",
+                                  STUDENT_REGISTRATION, STUDENT_SIGN_IN, BACK_TO_MAIN_PAGE);
 
                 userOption = userInput.nextInt();
                 userInput.nextLine();
@@ -59,6 +65,10 @@ public class Main
 
                     case STUDENT_SIGN_IN:
                         MyFunctions.signInOptions();
+                        break;
+
+                    case BACK_TO_MAIN_PAGE:
+                        System.out.println("Returns back to the main page...");
                         break;
                 }
                 break;

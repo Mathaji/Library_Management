@@ -4,11 +4,13 @@ import java.util.Scanner;
 
 public class Student
 {
-    private String      firstName;
-    private String      middleName;
-    private  String     lastName;
-    private final String     studentEmail;
+    private String     firstName;
+    private String     middleName;
+    private String     lastName;
+    private String     studentEmail;
     private final String     studentNumber;
+
+    private static final int MINIMUM_EMAIL_LENGTH = 15;
 
     public Student(final String firstName,
                    final String middleName,
@@ -19,6 +21,7 @@ public class Student
         validateFirstName(firstName);
         validateMiddleName(middleName);
         validateLastName(lastName);
+        validateStudentEmail(studentEmail);
 
         this.firstName     = firstName;
         this.lastName      = lastName;
@@ -55,6 +58,22 @@ public class Student
             throw new IllegalArgumentException("Last name cannot be empty");
         }
         this.lastName = lastName;
+    }
+
+    final void validateStudentEmail(final String studentEmail)
+    {
+
+        if((studentEmail != null) && (!studentEmail.isBlank() || (!studentEmail.isEmpty())))
+        {
+            if((studentEmail.length() > MINIMUM_EMAIL_LENGTH) && (studentEmail.contains("@gmail.com")))
+            {
+                this.studentEmail = studentEmail;
+            }
+        }
+        throw new IllegalArgumentException(String.format("Invalid student email address\n" +
+                                                         "Ensure Email address has a minimum of %d characters",
+                                                          MINIMUM_EMAIL_LENGTH));
+
     }
 
     final String getFirstName()
