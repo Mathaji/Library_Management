@@ -11,7 +11,7 @@ public class Main
     private static final int STUDENT_REGISTRATION = 1;
     private static final int STUDENT_SIGN_IN      = 2;
 
-    private static final int BACK_TO_MAIN_PAGE      = 3;
+    private static final int BACK_TO_MAIN_PAGE    = 3;
 
     private static final Scanner userInput = new Scanner(System.in);
 

@@ -8,6 +8,7 @@ public class Librarian
     private final int librarianAge;
     private final String phoneNumber;
 
+    private static final int LAST_NAME_INITIAL = 0;
 
     public Librarian(final String firstName,
                      final String middleName,
@@ -28,6 +29,7 @@ public class Librarian
         this.phoneNumber  = phoneNumber;
     }
 
+
     final void validateMiddleName(final String middleName)
     {
         if((middleName == null) || (!middleName.isBlank()) || (middleName.isEmpty()))
@@ -39,6 +41,14 @@ public class Librarian
             this.middleName = middleName;
         }
     }
+
+//    final void validateName(final String firstName, final String lastName)
+//    {
+//        if((firstName == null) || (lastName == null) || (firstName.isEmpty()) || (lastName.isEmpty()) || (firstName.isBlank() || (lastName.isBlank()))
+//        {
+//        }
+//    }
+
     final String getFirstName()
     {
         return firstName;
@@ -81,5 +91,10 @@ public class Librarian
             return getFirstName() + " " + getMiddleName() + " " + getLastName();
         }
         return getFirstName() + " " + " " + getLastName();
+    }
+
+    final String fileName()
+    {
+        return getFirstName() + getLastName().charAt(LAST_NAME_INITIAL);
     }
 }

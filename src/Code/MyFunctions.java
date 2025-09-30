@@ -17,6 +17,8 @@ public class MyFunctions
     private static final String REGEX_MID_SECTION_SPLIT   = "\\*";
     private static final String MID_SECTION_SPLIT         = "*";
 
+    private static final String REGEX_LIBRARIAN_PASSWORD_SPLIT = ":";
+
     private static final String FILEPATH_STUDENT   = "src" + File.separator + "Resources" + File.separator + "Student";
     private static final String FILEPATH_LIBRARIAN = "src" + File.separator + "Resources" + File.separator + "Librarian";
 
@@ -47,7 +49,7 @@ public class MyFunctions
         System.out.print("Enter Work Email: ");
         workEmail = input.nextLine();
 
-        System.out.print("Enter Password: ");
+        System.out.print("Enter password: ");
         password = input.nextLine();
 
         System.out.print("Enter Librarian Age: ");
@@ -59,12 +61,13 @@ public class MyFunctions
         phoneNumber = input.nextLine();
 
         librarian = new Librarian(firstName, middleName, lastName, workEmail, password, librarianAge, phoneNumber);
-        filename  = String.format(FILEPATH_LIBRARIAN + File.separator + "%s%s.txt",
-                    librarian.getFirstName(), librarian.getPassword());
+        filename  = String.format(FILEPATH_LIBRARIAN + File.separator + "%s.txt",
+                    librarian.fileName());
 
         try(final BufferedWriter writer = new BufferedWriter(new FileWriter(filename)))
         {
             writer.write(String.format("Librarian Details%s", SECTION_SPLIT));
+            writer.write(String.format("Password: %s%s", librarian.getPassword(), SECTION_SPLIT));
             writer.write(String.format("First Name: %s%s ", librarian.getFirstName(), MID_SECTION_SPLIT));
             writer.write(String.format("Middle Name: %s%s ", librarian.getMiddleName(), MID_SECTION_SPLIT));
             writer.write(String.format("Last Name: %s%s ", librarian.getLastName(), MID_SECTION_SPLIT));
@@ -76,12 +79,88 @@ public class MyFunctions
         {
             throw new RuntimeException(e);
         }
+
+        System.out.printf("%s (Librarian Account Successfully open)",
+                librarian.getFullName());
         input.close();
     }
 
     static void librarianSignIn()
     {
-        System.out.println("Librarian Sign in...");
+        final String filename;
+        final String firstName;
+        final String initialSurname;
+
+        System.out.print("Enter your First Name: ");
+        firstName = input.nextLine();
+
+        System.out.print("Enter Initial of Last Name: ");
+        initialSurname = input.nextLine();
+        filename =  String.format(FILEPATH_LIBRARIAN + File.separator + "%s%s.txt", firstName, initialSurname);
+
+        final List<String> librarianAccount;
+        librarianAccount = new ArrayList<>();
+
+        try(final BufferedReader reader = new BufferedReader(new FileReader(filename)))
+        {
+            String line;
+
+            while((line = reader.readLine()) != null)
+            {
+                final String librarianDetailsLabel;
+                final String librarianPassword;
+                final String librarianDetails;
+                final String[] parts;
+                final String enteredPassword;
+                final String thisPassword;
+
+                parts = line.split(REGEX_SECTION_SPLIT);
+
+                if(parts.length >= 3)
+                {
+                    for(int i = 0; i < parts.length; i++)
+                    {
+                        parts[i] = parts[i].trim();
+                    }
+
+                    librarianDetailsLabel = parts[0];
+                    librarianPassword     = parts[1];
+                    librarianDetails      = parts[2];
+
+                    librarianAccount.add(librarianDetailsLabel);
+                    librarianAccount.add(librarianPassword);
+                    librarianAccount.add(librarianDetails);
+
+                    String[] passwordSection = librarianPassword.split(REGEX_LIBRARIAN_PASSWORD_SPLIT);
+                    thisPassword = passwordSection[1].trim();
+                    System.out.print("Enter Password: ");
+                    enteredPassword = input.nextLine();
+
+                    if(enteredPassword.equals(thisPassword))
+                    {
+                        final String[] libraryDetails;
+                        libraryDetails = librarianDetails.split(REGEX_MID_SECTION_SPLIT);
+
+                        System.out.println("===================================");
+                        for(final String details: libraryDetails)
+                        {
+                            System.out.println(details.trim());
+                        }
+
+                    }
+                    else
+                    {
+                        System.out.print("Incorrect Password");
+                    }
+
+                }
+
+            }
+        }
+        catch(final Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
 // For Option 2: Registration of new Student
