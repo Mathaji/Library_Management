@@ -8,7 +8,8 @@ public class MyFunctions
     private static final int MAX_STUDENT_FILE_PARTS = 4;
 
     //Librarian Navigating Options
-    private static final int VIEW_LIBRARIAN_DETAILS = 1;
+    private static final int VIEW_LIBRARIAN_DETAILS                 = 1;
+    private static final int VIEW_STUDENT_DETAILS_IN_LIBRARIAN_MODE = 2;
 
     // Student Navigating Options
     private static final int VIEW_STUDENT_DETAILS = 1;
@@ -176,8 +177,10 @@ public class MyFunctions
     {
         final int options;
 
-        System.out.printf("%s\nOptions\n%d. View Librarian Details\n%s\nOption: ",
-                          SECTION_PRINT_BREAKER, VIEW_LIBRARIAN_DETAILS, SECTION_PRINT_BREAKER);
+        System.out.printf("%s\nOptions\n%d. View Librarian Details\n%d. View Students\n%s\nOption: ",
+                          SECTION_PRINT_BREAKER,
+                          VIEW_LIBRARIAN_DETAILS, VIEW_STUDENT_DETAILS_IN_LIBRARIAN_MODE,
+                          SECTION_PRINT_BREAKER);
         options = input.nextInt();
 
         input.nextLine();
@@ -188,8 +191,12 @@ public class MyFunctions
                 viewLibrarianDetails();
                 break;
 
-            case 2:
-                System.out.println("Check Student details...");
+            case VIEW_STUDENT_DETAILS_IN_LIBRARIAN_MODE:
+                final String studentNumber;
+
+                System.out.print("Enter Student Number: ");
+                studentNumber = input.nextLine();
+                readStudentDetailsAndBooks(studentNumber);
                 break;
 
         }
@@ -501,6 +508,75 @@ public class MyFunctions
         }
 
         signInOptions(file);
+    }
+
+// Librarian Actions with Student Account
+    static void readStudentDetailsAndBooks(final String filename)
+    {
+        final String studentNumber;
+        final String studentFile;
+        final List<String> studentData;
+
+        studentNumber = filename;
+
+        studentFile = String.format(FILEPATH_STUDENT + File.separator + "%s.txt", studentNumber);
+
+        studentData = new ArrayList<>();
+        try(final BufferedReader reader = new BufferedReader(new FileReader(studentFile)))
+        {
+            String line;
+            String[] parts;
+            String studentDetails;
+            String booksRead;
+            int loopCount = 0;
+
+            while((line = reader.readLine()) != null)
+            {
+                parts = line.split(REGEX_SECTION_SPLIT);
+
+                if(parts.length >= 4)
+                {
+                    for(int i = 0; i < parts.length; i++)
+                    {
+                        parts[i] = parts[i].trim();
+                    }
+
+                    studentDetails = parts[1];
+                    booksRead      = parts[3];
+
+                    studentData.add(studentDetails);
+                    studentData.add(booksRead);
+
+                    for(String sections: studentData)
+                    {
+                        loopCount++;
+                        if(loopCount == 2)
+                        {
+                            String[] books;
+                            int numberOfBooksRead = 0;
+
+                            System.out.printf("%s\nBooks Read\n%s", SECTION_PRINT_BREAKER, SECTION_PRINT_BREAKER);
+                            books = sections.split(REGEX_MID_SECTION_SPLIT);
+
+                            for(String oneBook: books)
+                            {
+                                if(oneBook.contains("Title:"))
+                                {
+                                    numberOfBooksRead++;
+                                }
+                                System.out.println(oneBook.trim());
+                            }
+                            System.out.printf("Number of Books read: %d", numberOfBooksRead);
+                        }
+                    }
+
+                }
+            }
+        }
+        catch(final Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
 }
