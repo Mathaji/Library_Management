@@ -106,11 +106,12 @@ public class MyFunctions
         final String initialSurname;
 
         System.out.print("Enter your First Name: ");
-        firstName = input.nextLine();
+        firstName = input.nextLine().toLowerCase();
 
         System.out.print("Enter Initial of Last Name: ");
-        initialSurname = input.nextLine();
-        filename =  String.format(FILEPATH_LIBRARIAN + File.separator + "%s%s.txt", firstName, initialSurname);
+        initialSurname = input.nextLine().toLowerCase();
+
+        filename =  String.format(FILEPATH_LIBRARIAN + File.separator + "%s%s.txt", firstName, initialSurname).toLowerCase();
 
         try(final BufferedReader reader = new BufferedReader(new FileReader(filename)))
         {
