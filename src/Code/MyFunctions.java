@@ -6,10 +6,20 @@ import java.util.Scanner;
 public class MyFunctions
 {
     private static final int MAX_STUDENT_FILE_PARTS = 4;
+
+    //Librarian Navigating Options
+    private static final int VIEW_LIBRARIAN_DETAILS = 1;
+
     // Student Navigating Options
     private static final int VIEW_STUDENT_DETAILS = 1;
     private static final int VIEW_BOOKS_READ      = 2;
     private static final int ADD_NEW_BOOK         = 3;
+
+    private static final int MINIMUM_LIBRARY_SECTIONS = 3;
+
+    private static final int USER_DETAILS_SECTION_IN_LIST = 3;
+
+    private static final String SECTION_PRINT_BREAKER = "======================================";
 
     private static final String REGEX_SECTION_SPLIT = "\\|";
     private static final String SECTION_SPLIT       = "|";
@@ -24,7 +34,11 @@ public class MyFunctions
 
     static final Scanner input = new Scanner(System.in);
 
-// For Option 1: Librarian Sign in
+    static List<String> fileContents = new ArrayList<>();
+
+
+
+    // For Option 1: Librarian Sign in
     static void librarianRegistration()
     {
         final String    firstName;
@@ -98,9 +112,6 @@ public class MyFunctions
         initialSurname = input.nextLine();
         filename =  String.format(FILEPATH_LIBRARIAN + File.separator + "%s%s.txt", firstName, initialSurname);
 
-        final List<String> librarianAccount;
-        librarianAccount = new ArrayList<>();
-
         try(final BufferedReader reader = new BufferedReader(new FileReader(filename)))
         {
             String line;
@@ -110,13 +121,17 @@ public class MyFunctions
                 final String librarianDetailsLabel;
                 final String librarianPassword;
                 final String librarianDetails;
+
                 final String[] parts;
+
                 final String enteredPassword;
                 final String thisPassword;
 
+                final String[] passwordSection;
+
                 parts = line.split(REGEX_SECTION_SPLIT);
 
-                if(parts.length >= 3)
+                if(parts.length >= MINIMUM_LIBRARY_SECTIONS)
                 {
                     for(int i = 0; i < parts.length; i++)
                     {
@@ -127,30 +142,23 @@ public class MyFunctions
                     librarianPassword     = parts[1];
                     librarianDetails      = parts[2];
 
-                    librarianAccount.add(librarianDetailsLabel);
-                    librarianAccount.add(librarianPassword);
-                    librarianAccount.add(librarianDetails);
+                    fileContents.add(librarianDetailsLabel);
+                    fileContents.add(librarianPassword);
+                    fileContents.add(librarianDetails);
 
-                    String[] passwordSection = librarianPassword.split(REGEX_LIBRARIAN_PASSWORD_SPLIT);
-                    thisPassword = passwordSection[1].trim();
+                    passwordSection = librarianPassword.split(REGEX_LIBRARIAN_PASSWORD_SPLIT);
+                    thisPassword    = passwordSection[1].trim();
+
                     System.out.print("Enter Password: ");
                     enteredPassword = input.nextLine();
 
                     if(enteredPassword.equals(thisPassword))
                     {
-                        final String[] libraryDetails;
-                        libraryDetails = librarianDetails.split(REGEX_MID_SECTION_SPLIT);
-
-                        System.out.println("===================================");
-                        for(final String details: libraryDetails)
-                        {
-                            System.out.println(details.trim());
-                        }
-
+                        librarianSignInOptions();
                     }
                     else
                     {
-                        System.out.print("Incorrect Password");
+                        System.out.println("Incorrect Password");
                     }
 
                 }
@@ -163,10 +171,50 @@ public class MyFunctions
         }
     }
 
+    static void librarianSignInOptions()
+    {
+        final int options;
+
+        System.out.printf("%s\nOptions\n%d. View Librarian Details\n%s\nOption: ",
+                          SECTION_PRINT_BREAKER, VIEW_LIBRARIAN_DETAILS, SECTION_PRINT_BREAKER);
+        options = input.nextInt();
+
+        input.nextLine();
+
+        switch(options)
+        {
+            case VIEW_LIBRARIAN_DETAILS:
+
+                String[]   librarianDetails;
+                int sectionLoop = 0;
+
+                for(final String sections: fileContents)
+                {
+                    sectionLoop++;
+
+                    if(sectionLoop == USER_DETAILS_SECTION_IN_LIST)
+                    {
+                        librarianDetails = sections.split(REGEX_MID_SECTION_SPLIT);
+
+                        for(final String details: librarianDetails)
+                        {
+                            System.out.println(details.trim());
+                        }
+                    }
+                }
+                break;
+
+            case 2:
+                System.out.println("Check Student details...");
+                break;
+
+        }
+    }
+
 // For Option 2: Registration of new Student
     static void registerNewStudent()
     {
-        System.out.println("=======================\nWelcome to Registration Form\n=======================");
+        System.out.printf("%s\n    Welcome to Registration Form\n%s\n", SECTION_PRINT_BREAKER, SECTION_PRINT_BREAKER);
         
         final String  studentName;
         final String  middleName;
@@ -205,7 +253,7 @@ public class MyFunctions
             writer.write(String.format("Last Name: %s%s ", student.getLastName(), MID_SECTION_SPLIT));
             writer.write(String.format("Student Email: %s%s ", student.getStudentEmail(), MID_SECTION_SPLIT));
             writer.write(String.format("Student Number: %s", student.getStudentNumber()));
-            writer.write(String.format("%sBooks%s==========================%s", SECTION_SPLIT, SECTION_SPLIT, MID_SECTION_SPLIT));
+            writer.write(String.format("%sBooks%s%s%s", SECTION_SPLIT, SECTION_SPLIT, SECTION_PRINT_BREAKER, MID_SECTION_SPLIT));
 
         }
         catch(final Exception e)
@@ -279,9 +327,6 @@ public class MyFunctions
         final String fileToRead;
         fileToRead = String.format(FILEPATH_STUDENT + File.separator + "%s.txt", studentNumber);
 
-        final List<String> fileContents;
-
-        fileContents = new ArrayList<>();
         try(BufferedReader reader = new BufferedReader(new FileReader(fileToRead)))
         {
             // Add a file reader that reads a specific line
@@ -332,13 +377,9 @@ public class MyFunctions
 
     static void viewBooksRead(final String studentNumber)
     {
-
         final String fileToRead;
-        final List<String> fileContents;
 
         fileToRead = String.format(FILEPATH_STUDENT + File.separator + "%s.txt", studentNumber);
-
-        fileContents = new ArrayList<>();
 
         try(final BufferedReader reader = new BufferedReader(new FileReader(fileToRead)))
         {
@@ -429,10 +470,10 @@ public class MyFunctions
             write.write(String.format("Author: %s%s", newBook.getAuthor(), MID_SECTION_SPLIT));
             write.write(String.format("Company Published: %s%s", newBook.getCompanyPublished(), MID_SECTION_SPLIT));
             write.write(String.format("Year Published: %s%s", newBook.getYearPublished(), MID_SECTION_SPLIT));
-            write.write(String.format("Book Description%s==================%s%s%s==================%s",
-                    MID_SECTION_SPLIT, MID_SECTION_SPLIT,
+            write.write(String.format("Book Description%s%s%s%s%s%s%s",
+                    MID_SECTION_SPLIT, SECTION_PRINT_BREAKER, MID_SECTION_SPLIT,
                     newBook.getBookDescription(),
-                    MID_SECTION_SPLIT, MID_SECTION_SPLIT));
+                    MID_SECTION_SPLIT, SECTION_PRINT_BREAKER, MID_SECTION_SPLIT));
         }
         catch(final Exception e)
         {

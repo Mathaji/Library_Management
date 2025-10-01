@@ -10,7 +10,7 @@ public class Student
     private String     studentEmail;
     private final String     studentNumber;
 
-    private static final int MINIMUM_EMAIL_LENGTH = 15;
+    private static final int MINIMUM_EMAIL_LENGTH = 10;
 
     public Student(final String firstName,
                    final String middleName,
@@ -68,12 +68,12 @@ public class Student
             if((studentEmail.length() > MINIMUM_EMAIL_LENGTH) && (studentEmail.contains("@gmail.com")))
             {
                 this.studentEmail = studentEmail;
+                return;
             }
+            throw new IllegalArgumentException(String.format("Invalid student email address\n" +
+                            "Ensure Email address has a minimum of %d characters",
+                    MINIMUM_EMAIL_LENGTH));
         }
-        throw new IllegalArgumentException(String.format("Invalid student email address\n" +
-                                                         "Ensure Email address has a minimum of %d characters",
-                                                          MINIMUM_EMAIL_LENGTH));
-
     }
 
     final String getFirstName()
