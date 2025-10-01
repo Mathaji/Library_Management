@@ -185,30 +185,34 @@ public class MyFunctions
         switch(options)
         {
             case VIEW_LIBRARIAN_DETAILS:
-
-                String[]   librarianDetails;
-                int sectionLoop = 0;
-
-                for(final String sections: fileContents)
-                {
-                    sectionLoop++;
-
-                    if(sectionLoop == USER_DETAILS_SECTION_IN_LIST)
-                    {
-                        librarianDetails = sections.split(REGEX_MID_SECTION_SPLIT);
-
-                        for(final String details: librarianDetails)
-                        {
-                            System.out.println(details.trim());
-                        }
-                    }
-                }
+                viewLibrarianDetails();
                 break;
 
             case 2:
                 System.out.println("Check Student details...");
                 break;
 
+        }
+    }
+
+    static void viewLibrarianDetails()
+    {
+        String[]   librarianDetails;
+        int sectionLoop = 0;
+
+        for(final String sections: fileContents)
+        {
+            sectionLoop++;
+
+            if(sectionLoop == USER_DETAILS_SECTION_IN_LIST)
+            {
+                librarianDetails = sections.split(REGEX_MID_SECTION_SPLIT);
+
+                for(final String details: librarianDetails)
+                {
+                    System.out.println(details.trim());
+                }
+            }
         }
     }
 
