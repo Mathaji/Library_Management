@@ -554,38 +554,40 @@ public class MyFunctions
 
                         System.out.print("1. View Student Details\n2. View Student Books Read\nOption: ");
                         sectionOption = input.nextInt();
-                        input.nextLine();
 
+                        input.nextLine();
                         switch(sectionOption)
                         {
                             case 1:
-                                String[] oneStudent;
-                                oneStudent = sections.split(REGEX_MID_SECTION_SPLIT);
-
-                                for(final String student: oneStudent)
+                                if (loopCount == 1)
                                 {
-                                    System.out.println(student.trim());
+                                    String[] oneStudent;
+                                    oneStudent = sections.split(REGEX_MID_SECTION_SPLIT);
+
+                                    for (final String student : oneStudent) {
+                                        System.out.println(student.trim());
+                                    }
                                 }
-                                break;
+                                return;
 
                             case 2:
-                                String[] books;
-                                int numberOfBooksRead = 0;
-
-                                System.out.printf("%s\nBooks Read\n%s", SECTION_PRINT_BREAKER, SECTION_PRINT_BREAKER);
-                                books = sections.split(REGEX_MID_SECTION_SPLIT);
-
-                                for(String oneBook: books)
+                                if (loopCount == 2)
                                 {
-                                    if(oneBook.contains("Title:"))
-                                    {
-                                        numberOfBooksRead++;
-                                    }
-                                    System.out.println(oneBook.trim());
-                                }
-                                System.out.printf("Number of Books read: %d", numberOfBooksRead);
-                                break;
+                                    String[] books;
+                                    int numberOfBooksRead = 0;
 
+                                    System.out.printf("%s\nBooks Read\n%s", SECTION_PRINT_BREAKER, SECTION_PRINT_BREAKER);
+                                    books = sections.split(REGEX_MID_SECTION_SPLIT);
+
+                                    for (String oneBook : books) {
+                                        if (oneBook.contains("Title:")) {
+                                            numberOfBooksRead++;
+                                        }
+                                        System.out.println(oneBook.trim());
+                                    }
+                                    System.out.printf("Number of Books read: %d", numberOfBooksRead);
+                                }
+                                return;
                         }
                     }
 
