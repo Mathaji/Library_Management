@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 public class Book
 {
     private final String author;
@@ -46,14 +44,4 @@ public class Book
         return bookDescription;
     }
 
-    @Override
-    public String toString()
-    {
-        return String.format("Author: %s\n" +
-                             "Book Title: %s\n" +
-                             "Company Published: %s\n" +
-                             "Year Published: %d\n\n" +
-                             "Book Description: %s",
-                getAuthor(), getBookTitle(), getCompanyPublished(), getYearPublished(), getBookDescription());
-    }
 }
