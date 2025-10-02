@@ -524,17 +524,17 @@ public class MyFunctions
         studentData = new ArrayList<>();
         try(final BufferedReader reader = new BufferedReader(new FileReader(studentFile)))
         {
-            String line;
+            String   line;
             String[] parts;
-            String studentDetails;
-            String booksRead;
+            String   studentDetails;
+            String   booksRead;
             int loopCount = 0;
 
             while((line = reader.readLine()) != null)
             {
                 parts = line.split(REGEX_SECTION_SPLIT);
 
-                if(parts.length >= 4)
+                if(parts.length >= MAX_STUDENT_FILE_PARTS)
                 {
                     for(int i = 0; i < parts.length; i++)
                     {
@@ -547,7 +547,7 @@ public class MyFunctions
                     studentData.add(studentDetails);
                     studentData.add(booksRead);
 
-                    int sectionOption;
+                    final int sectionOption;
 
                     System.out.print("1. View Student Details\n2. View Student Books Read\nOption: ");
                     sectionOption = input.nextInt();
@@ -559,28 +559,31 @@ public class MyFunctions
                         switch(sectionOption)
                         {
                             case 1:
-                                if (loopCount == 1)
+                                if(loopCount == 1)
                                 {
-                                    String[] oneStudent;
+                                    final String[] oneStudent;
                                     oneStudent = sections.split(REGEX_MID_SECTION_SPLIT);
 
-                                    for (final String student : oneStudent) {
+                                    for(final String student : oneStudent)
+                                    {
                                         System.out.println(student.trim());
                                     }
                                 }
                                 break;
 
                             case 2:
-                                if (loopCount == 2)
+                                if(loopCount == 2)
                                 {
-                                    String[] books;
+                                    final String[] books;
                                     int numberOfBooksRead = 0;
 
                                     System.out.printf("%s\nBooks Read\n%s", SECTION_PRINT_BREAKER, SECTION_PRINT_BREAKER);
                                     books = sections.split(REGEX_MID_SECTION_SPLIT);
 
-                                    for (String oneBook : books) {
-                                        if (oneBook.contains("Title:")) {
+                                    for(final String oneBook : books)
+                                    {
+                                        if(oneBook.contains("Title:"))
+                                        {
                                             numberOfBooksRead++;
                                         }
                                         System.out.println(oneBook.trim());
