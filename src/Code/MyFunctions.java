@@ -547,15 +547,15 @@ public class MyFunctions
                     studentData.add(studentDetails);
                     studentData.add(booksRead);
 
-                    for(String sections: studentData)
+                    int sectionOption;
+
+                    System.out.print("1. View Student Details\n2. View Student Books Read\nOption: ");
+                    sectionOption = input.nextInt();
+                    input.nextLine();
+
+                    for(final String sections: studentData)
                     {
                         loopCount++;
-                        int sectionOption;
-
-                        System.out.print("1. View Student Details\n2. View Student Books Read\nOption: ");
-                        sectionOption = input.nextInt();
-
-                        input.nextLine();
                         switch(sectionOption)
                         {
                             case 1:
@@ -568,7 +568,7 @@ public class MyFunctions
                                         System.out.println(student.trim());
                                     }
                                 }
-                                return;
+                                break;
 
                             case 2:
                                 if (loopCount == 2)
@@ -587,7 +587,7 @@ public class MyFunctions
                                     }
                                     System.out.printf("Number of Books read: %d", numberOfBooksRead);
                                 }
-                                return;
+                                break;
                         }
                     }
 
